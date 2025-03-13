@@ -14,9 +14,8 @@ class Solution {
     int solve(int i,int W,vector<int> & wt,vector<int> & arr,vector<vector<int>> &dp){
         // if(wt[i]>W)return 0;
         if(i==0 ){
-            // if(wt[i]<=W)return arr[i];
-            // else return 0;
-            return (W/wt[i])*arr[i];
+            if(wt[i]<=W)return (W/wt[i])*arr[i];
+            else return 0;
         }
         if(dp[i][W]!=-1)return dp[i][W];
         int take=0;
@@ -30,8 +29,22 @@ class Solution {
     int knapSack(vector<int>& val, vector<int>& wt, int capacity) {
         // code here
         int n=wt.size();
-        vector<vector<int>> dp(n,vector<int> (capacity+1,-1));
-        return solve(n-1,capacity,wt,val,dp);
+        int W=capacity;
+        vector<vector<int>> dp(n,vector<int> (capacity+1,0));
+        for(int w=0;w<=W;w++){
+            dp[0][w]=(w/wt[0])*val[0];
+        }
+        for(int i=1;i<val.size();i++){
+            for(int w=0;w<=W;w++){
+              int take=0;
+              if(w>=wt[i]){
+                 take=val[i]+dp[i][w-wt[i]];  
+              }
+              int nottake=0+dp[i-1][w];
+              dp[i][w]=max(take,nottake);  
+            }
+        }
+        return dp[wt.size()-1][W];
     }
 };
 
