@@ -2,39 +2,39 @@
 
 class Solution {
   public:
-  bool check(int mid ,int k,vector<int> &arr){
-        int sum=0;int cnt=1;
+    bool check(vector<int> &arr,int mid,int k){
+        int cnt=1;int sum=0;
         for(auto x:arr){
-            if(sum+x>mid){
-                cnt++;
-                sum=x;
-            }
-            else{
-                sum+=x;
-            }
+            if(x>mid)return false;
+           if(sum+x<=mid){
+             sum+=x;   
+           }
+           else{
+               cnt++;
+               sum=x;
+           }
         }
+        //if(sum!=0)cnt++;
         return cnt<=k;
+        
     }
     int minTime(vector<int>& arr, int k) {
-       int low=*max_element(arr.begin(),arr.end());
-       int high=accumulate(arr.begin(),arr.end(),0);
-       int ans=0;
-       while(low<=high){
-        int mid=low + (high-low)/2;
-        if(check(mid,k,arr)){
-            ans=mid;
-            high=mid-1;
+        // code here
+        //sort(arr.begin(),arr.end());
+        int low=*min_element(arr.begin(),arr.end());
+        int high=accumulate(arr.begin(),arr.end(),0);
+        int ans=-1;
+        while(low<=high){
+           int mid=low+(high-low)/2;
+           if(check(arr,mid,k)){
+               ans=mid;
+               high=mid-1;
+           }
+           else{
+               low=mid+1;
+           }
         }
-        else{
-            low=mid+1;
-        }
-       } 
-       return ans;
+        // return minimum time
+        return ans;
     }
-    // int (vector<int>& arr, int k) {
-    //     // code here
-        
-    //     // return minimum time
-        
-    // }
 };
