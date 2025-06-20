@@ -1,47 +1,34 @@
 // User function Template for C++
 class Solution {
   public:
-    void dfs(int i,vector<vector<pair<int,int>>> &arr,stack<int> &st,vector<int>&visit){
-        visit[i]=1;
-        //path[1]=0;
-        for(auto it:arr[i]){
-            if(!visit[it.first]){
-                dfs(it.first,arr,st,visit);
-            }
-        }
-        st.push(i);
-    }
+   
     vector<int> shortestPath(int V, int E, vector<vector<int>>& edge) {
         // code here
+        vector<vector<pair<int,int>>> arr(V);
         vector<int> dist(V,INT_MAX);
-        vector<vector<pair<int,int>>>arr(V);
-        stack<int> st;
-        for(int i=0;i<E;i++){
-            int x=edge[i][0];
-            int y=edge[i][1];
-            int w=edge[i][2];
+        queue<int> q;
+        q.push(0);
+        for(auto it:edge){
+            int x=it[0];
+            int y=it[1];
+            int w=it[2];
             arr[x].push_back({y,w});
-            
         }
-        vector<int> visit(V,0);
-        for(int i=0;i<V;i++){
-            if(!visit[i])dfs(i,arr,st,visit);
-        }
-        //vector<int> sort;
         dist[0]=0;
-        while(!st.empty()){
-            int front=st.top();
-            st.pop();
-            if(dist[front]!=INT_MAX){
-              for(auto it:arr[front]){
-               dist[it.first]=min(dist[it.first],dist[front]+it.second); 
-               
-              }  
+        while(!q.empty()){
+            int front=q.front();
+            q.pop();
+            for(auto it:arr[front]){
+                int adjnode=it.first;
+                int wt=it.second;
+                if(dist[adjnode]>wt+dist[front]){
+                    dist[adjnode]=wt+dist[front];
+                    q.push(adjnode);
+                }
             }
         }
-        
-        for(auto &it:dist){
-            if(it==INT_MAX)it=-1;
+        for(int i=0;i<V;i++){
+            if(dist[i]==INT_MAX)dist[i]=-1;
         }
         return dist;
     }
