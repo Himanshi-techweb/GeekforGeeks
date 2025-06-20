@@ -43,30 +43,36 @@ class Solution {
     
     vector<int>  eventualSafeNodes(int V, vector<int> adj[]){
        vector<int> in(V,0);
-       vector<int> out(V,0);
-       vector<vector<int>> arr(V);
-       for(int i=0;i<V;i++){
-        for(auto it:adj[i]){
-            arr[it].push_back(i);
-            out[i]++;
-        }   
-       }
+       vector<vector<int>> reverse(V);
+       //vector<int> in(V,0);
+       vector<int> result;
        queue<int> q;
        for(int i=0;i<V;i++){
-           if(out[i]==0)q.push(i);
-       }
-       vector<int> t;
-       while(!q.empty()){
-           int front=q.front();
-           t.push_back(front);
-           q.pop();
-           for(auto it:arr[front]){
-               if(out[it]>0)out[it]--;
-               if(out[it]==0)q.push(it);
+           for(auto it:adj[i]){
+            reverse[it].push_back(i);
+            in[i]++;   
            }
        }
-       sort(t.begin(),t.end());
-       return t;
+       
+        for(int i=0;i<V;i++){
+            if(in[i]==0){
+                q.push(i);
+                result.push_back(i);
+            }
+        }
+        while(!q.empty()){
+           int front=q.front();
+           q.pop();
+           for(auto it:reverse[front]){
+               in[it]--;
+               if(in[it]==0){
+                   q.push(it);
+                   result.push_back(it);
+               }
+           }
+        }
+        sort(result.begin(),result.end());
+        return result;
     }
     
     
