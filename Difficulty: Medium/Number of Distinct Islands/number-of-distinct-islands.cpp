@@ -1,30 +1,33 @@
 // User function Template for C++
-#include <set>
 class Solution {
   public:
     vector<vector<int>> rc={{0,-1},{-1,0},{0,1},{1,0}};
-    void dfs(int i,int j,int i_base,int j_base,int row,int col,vector<vector<int>>&visit,vector<vector<int>>&arr,vector<pair<int,int>>&check){
-        check.push_back({i-i_base,j-j_base});
+    void dfs(int i,int j,int i_base,int j_base,int m,int n,vector<vector<int>>& arr,vector<vector<int>> &visit,vector<pair<int,int>> &check){
         visit[i][j]=1;
-        for(int k=0;k<rc.size();k++){
-            int nr=i+rc[k][0];
-            int nc=j+rc[k][1];
-            if(nr>=0 && nr<row && nc>=0 && nc<col && arr[nr][nc]==1 && !visit[nr][nc]){
-                dfs(nr,nc,i_base,j_base,row,col,visit,arr,check);
+        int ni=i-i_base;
+        int nj=j-j_base;
+        check.push_back({ni,nj});
+        for(auto it:rc){
+            int nr=i+it[0];
+            int nc=j+it[1];
+            if(nr>=0 && nr<m && nc>=0 && nc<n && !visit[nr][nc] && arr[nr][nc]==1){
+                visit[nr][nc]=1;
+                dfs(nr,nc,i_base,j_base,m,n,arr,visit,check);
             }
         }
     }
     int countDistinctIslands(vector<vector<int>>& arr) {
         // code here
+        int m=arr.size();
+        int n=arr[0].size();
+        vector<vector<int>> visit(m,vector<int> (n,0));
         set<vector<pair<int,int>>> st;
-        int row=arr.size();
-        int col=arr[0].size();
-        vector<vector<int>> visit(row,vector<int>(col,0));
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                if(arr[i][j]==1 && !visit[i][j]){
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(!visit[i][j] && arr[i][j]==1){
                     vector<pair<int,int>> check;
-                    dfs(i,j,i,j,row,col,visit,arr,check);
+                    dfs(i,j,i,j,m,n,arr,visit,check);
+                    sort(check.begin(),check.end());
                     st.insert(check);
                 }
             }
