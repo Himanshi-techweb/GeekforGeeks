@@ -8,32 +8,31 @@ using namespace std;
 class Solution {
 
   public:
-    int minOperations(string &t1, string &t2) {
-      int n1=t1.size();
-      int n2=t2.size();
-      int k=n1+n2;
-     vector<vector<int>>dp(n1+1,vector<int> (n2+1,0));
-    // vector<int> prev(n2+1,0);
-    // vector<int> curr(n2+1,0);
-      for(int i=0;i<=n1;i++){
-        dp[i][0]=0;
-      }
-      for(int i=0;i<=n2;i++){
-        dp[0][i]=0;
-      }
-    // prev[0]=curr[0]=0;
-      for(int i=1;i<=n1;i++){
-        for(int j=1;j<=n2;j++){
-            if(t1[i-1]==t2[j-1]){
-                dp[i][j]=1+dp[i-1][j-1];
-            }
+    int minOperations(string &x, string &y) {
+       int m=x.size();
+       int n=y.size();
+       vector<vector<int>> dp(m+1,vector<int> (n+1,0));
+       vector<int> prev(n+1,0);
+        for(int i=0;i<=m;i++){
+            dp[i][0]=0;
+        } 
+        for(int j=0;j<=n;j++){
+            dp[0][j]=0;
+        } 
+        for(int i=1;i<=m;i++){
+          for(int j=1;j<=n;j++){
+            if(x[i-1]==y[j-1])dp[i][j]= 1+dp[i-1][j-1];
             else{
-                dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+              int left=dp[i-1][j];
+              int right=dp[i][j-1];
+              dp[i][j]= max(left,right);
             }
+          }
         }
-        // prev=curr;
-      } 
-      return k-2*dp[n1][n2];
+        int common= dp[m][n];
+        int total_size=m+n;
+        return total_size-2*common;
+        
     }
 };
 
