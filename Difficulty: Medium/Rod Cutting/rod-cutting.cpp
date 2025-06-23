@@ -1,59 +1,22 @@
-//{ Driver Code Starts
-// Initial Template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
 // User function Template for C++
 
 class Solution {
   public:
-    int solve(int i,int l,vector<int> &arr,vector<vector<int>>&dp){
-        // if(l==0)return 0;
+    int solve(int i,int length,vector<int> & price,vector<vector<int>>&dp){
+        if(length==0)return 0;
         if(i==0){
-          return (l)*arr[0];  
+            return price[0]*(length);
         }
-        if(dp[i][l]!=-1)return dp[i][l];
-        int take=0;
-        if(i+1<=l ){
-            take=arr[i]+solve(i,l-(i+1),arr,dp);
-        }
-        int nottake=0+solve(i-1,l,arr,dp);
-        return dp[i][l]=max(take,nottake);
+        if(dp[i][length]!=-1)return dp[i][length];
+        int take=INT_MIN;
+        if(i+1<=length) take=price[i]+solve(i,length-(i+1),price,dp);
+        int nottake=solve(i-1,length,price,dp);
+        return dp[i][length]=max(take,nottake);
     }
     int cutRod(vector<int> &price) {
         // code here
-        int n=price.size();
-        vector<vector<int>> dp(n,vector<int> (n+1,-1));
-        return solve(n-1,n,price,dp);
+        int length=price.size();
+        vector<vector<int>> dp(length,vector<int> (length+1,-1));
+        return solve(length-1,length,price,dp);
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    scanf("%d ", &t);
-    while (t--) {
-
-        vector<int> a;
-        string input;
-        getline(cin, input);
-        stringstream ss(input);
-        int number;
-        while (ss >> number) {
-            a.push_back(number);
-        }
-
-        Solution ob;
-
-        cout << ob.cutRod(a) << endl;
-        cout << "~" << endl;
-    }
-    return 0;
-}
-// } Driver Code Ends
