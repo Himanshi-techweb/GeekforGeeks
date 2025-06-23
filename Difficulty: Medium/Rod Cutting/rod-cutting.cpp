@@ -3,7 +3,6 @@
 class Solution {
   public:
     int solve(int i,int length,vector<int> & price,vector<vector<int>>&dp){
-        if(length==0)return 0;
         if(i==0){
             return price[0]*(length);
         }
