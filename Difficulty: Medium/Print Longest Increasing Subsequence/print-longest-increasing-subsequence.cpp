@@ -1,62 +1,34 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
 class Solution {
   public:
-    vector<int> longestIncreasingSubsequence(int n, vector<int>& arr) {
+    vector<int> getLIS(vector<int>& arr) {
         // Code here
-        vector<vector<int>> check(n);
-        for(int i=0;i<n;i++){
-           check[i].push_back(arr[i]);
-        }
+        int n=arr.size();
         vector<int> dp(n,1);
-        for(int i=1;i<n;i++){
-           for(int j=0;j<i;j++){
-              if(arr[i]>arr[j]){
-                  if(dp[j]+1>dp[i]){
-                    dp[i]=1+dp[j];
-                    check[i]=check[j];
-                    check[i].push_back(arr[i]);
-                  }
-              }
-           }
-        }
-        int ans=0;int k=0;
+        vector<int> back(n);
+        vector<int> ans;
+        for(int i=0;i<back.size();i++)back[i]=i;
         for(int i=0;i<n;i++){
-           if(dp[i]>ans){
-               ans=dp[i];
-               k=i;
+            for(int prev=0;prev<i;prev++){
+                if(arr[i]>arr[prev] && dp[i]<1+dp[prev]){
+                   dp[i]=1+dp[prev];
+                   back[i]=prev;
+                }
+            }
+        }int ix=0;int maxi=dp[0];
+        for(int i=1;i<dp.size();i++){
+           if(dp[i]>maxi){
+               ix=i;
+               maxi=dp[i];
            } 
         }
-        return check[k];
+        ans.push_back(arr[ix]);
+        while(ix!=back[ix]){
+           ix=back[ix];
+           ans.push_back(arr[ix]);
+        }
+        // ans.push_back(arr[ix]);
+        reverse(ans.begin(),ans.end());
+        return ans;
+        
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        int N;
-        cin >> N;
-        vector<int> arr(N);
-        for (int i = 0; i < N; i++) {
-            cin >> arr[i];
-        }
-        Solution obj;
-        vector<int> res = obj.longestIncreasingSubsequence(N, arr);
-        for (auto x : res)
-            cout << x << " ";
-        cout << "\n";
-    
-cout << "~" << "\n";
-}
-    return 0;
-}
-// } Driver Code Ends
