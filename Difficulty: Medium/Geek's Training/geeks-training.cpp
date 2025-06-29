@@ -1,34 +1,40 @@
 class Solution {
   public:
     int solve(int i,int task,vector<vector<int>>&arr,vector<vector<int>>&dp){
-        if(i==0){
-            int maxi=0;
-            for(int j=0;j<3;j++){
-                if(j!=task){
-                    maxi=max(maxi,arr[0][j]);
-                }
-            }
-            return dp[0][task]=maxi;
-        }
-        if(dp[i][task]!=-1)return dp[i][task];
-        int merit=0;
-        for(int j=0;j<3;j++){
-            if(j!=task){
-                int point=arr[i][j]+solve(i-1,j,arr,dp);
-                merit=max(merit,point);
-            }
-        }
-        return dp[i][task]=merit;
+       if(i<0)return 0;
+    //   if(i==0 && task==0) return max(arr[i][1],arr[i][2]);
+    //   else if(i==0 && task==1) return max(arr[i][0],arr[i][2]);
+    //   else if(i==0 && task==2) return max(arr[i][1],arr[i][0]); mistake
+       if(i==0){
+           int maxi=0;
+           for(int k=0;k<3;k++){
+               if(k!=task){
+                   maxi=max(maxi,arr[0][k]);
+               }
+           }
+           return maxi;
+       }
+       if(dp[i][task]!=-1)return dp[i][task];
+       int point=INT_MIN;
+       //running taken
+       if(task==0){
+           point=max(point,max(arr[i][1]+solve(i-1,1,arr,dp),arr[i][2]+solve(i-1,2,arr,dp)));
+       }
+       else if(task==1){
+           point =max(point,max(arr[i][2]+solve(i-1,2,arr,dp),arr[i][0]+solve(i-1,0,arr,dp)));
+       }
+       else if(task==2){
+           point=max(point,max(arr[i][0]+solve(i-1,0,arr,dp),arr[i][1]+solve(i-1,1,arr,dp)));
+       }
+       else{
+           point=max({arr[i][0]+solve(i-1,0,arr,dp),arr[i][1]+solve(i-1,1,arr,dp),arr[i][2]+solve(i-1,2,arr,dp)});
+       }
+       return dp[i][task]=point;
         
     }
     int maximumPoints(vector<vector<int>>& arr) {
         // Code here
-        int n=arr.size();
-        // return solve(n-1,3,arr);
-        vector<vector<int>> dp(n+1,vector<int>(4,-1));
-        int a=solve(n-1,0,arr,dp);
-        int b=solve(n-1,1,arr,dp);
-        int c=solve(n-1,2,arr,dp);
-        return max({dp[n-1][1],dp[n-1][0],dp[n-1][2]});
+       vector<vector<int>> dp(arr.size(),vector<int> (4,-1));
+       return solve(arr.size()-1,3,arr,dp);
     }
 };
