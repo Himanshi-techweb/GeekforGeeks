@@ -1,33 +1,24 @@
 class Solution {
   public:
+    int solve(int i,int j,vector<vector<int>> &arr,vector<vector<int>>&dp){
+        if(i==0 && j==0)return 1;
+        if(i<0 || j<0)return 0;
+        if(dp[i][j]!=-1)return dp[i][j];
+        int left=0;
+        if(j-1>=0 && arr[i][j-1]==0) left=solve(i,j-1,arr,dp);
+        int above=0;
+        if(i-1>=0 && arr[i-1][j]==0)above=solve(i-1,j,arr,dp);
+        return dp[i][j]=left+above;
+    }
     int uniquePaths(vector<vector<int>> &grid) {
-        //code here
+        // //code here
         int m=grid.size();
         int n=grid[0].size();
-        queue<pair<int,int>> q;
-        vector<vector<int>> rc={{0,1},{1,0}};
-        if(grid[0][0]==1 || grid[m-1][n-1]==1)return 0;
-        q.push({0,0});
-        vector<int> way(m*n+1);
-        way[0]=1;
-        // visit[0][0]=1;
-        while(!q.empty()){
-            int row=q.front().first;
-            int col=q.front().second;
-            q.pop();
-            int node=row*n + col;
-            for(auto it:rc){
-                int nr=row+it[0];int nc=col+it[1];
-                if(nr<m && nc<n && grid[nr][nc]==0 ){
-                    
-                    int adjnode=nr*n +nc;
-                    if(way[adjnode]==0)q.push({nr,nc});
-                    way[adjnode]=way[adjnode]+way[node];
         
-                }
-            }
-        }
-        return way[m*n -1];
+        if(grid[0][0]==1 || grid[m-1][n-1]==1)return 0;
+        vector<vector<int>> dp(m+1,vector<int> (n,-1));
+        return solve(m-1,n-1,grid,dp);
+        
         
     }
     
