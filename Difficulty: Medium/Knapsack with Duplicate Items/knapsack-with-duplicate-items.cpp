@@ -6,12 +6,11 @@ class Solution {
     int solve(int i,int w,vector<int> & wt,vector<int> &val,vector<vector<int>> &dp){
         // if(i<0)return -1e8;
         if(i==0){
-            if(wt[0]<=w )return val[0]*(w/wt[0]);
-            else return 0;
+            return (w/wt[0])*val[0];
         }
         if(dp[i][w]!=-1)return dp[i][w];
         int take=-1e8;
-        if(wt[i]<=w )take=val[i]+solve(i,w-wt[i],wt,val,dp);
+        if(wt[i]<=w)take=val[i]+solve(i,w-wt[i],wt,val,dp);
         int nottake=solve(i-1,w,wt,val,dp);
         return dp[i][w]=max(take,nottake);
     }
