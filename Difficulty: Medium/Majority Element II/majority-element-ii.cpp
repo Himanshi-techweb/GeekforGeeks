@@ -1,40 +1,34 @@
 class Solution {
   public:
-    // Function to find the majority elements in the array
     vector<int> findMajority(vector<int>& arr) {
-        // Your code goes here.
-        int cnt1=0;int el1=0;
-        int cnt2=0;int el2=0;
-        for(int i=0;i<arr.size();i++){
-            if(cnt1==0 && arr[i]!=el2){
-                el1=arr[i];cnt1++;
-            }
-            else if(cnt2==0 && arr[i]!=el1){
-                el2=arr[i];
-                cnt2++;
-            }
-            else if(el1==arr[i])cnt1++;
-            else if(el2==arr[i])cnt2++;
-            else {
-                cnt1--;cnt2--;
-            }
-        }
+        // Code here
+        int maj1=0;int maj2=0;int cnt1=0;int cnt2=0;
         vector<int> ans;
-        int n=arr.size();
-        if(cnt1>0){
-          int check1=0;  
-          for(int i=0;i<arr.size();i++){
-              if(arr[i]==el1)check1++;
-          }
-          if(check1> (ceil(n/3)))ans.push_back(el1);
+        for(int i=0;i<arr.size();i++){
+           if(cnt1==0 && arr[i]!=maj2){
+               maj1=arr[i];
+           } 
+           if(cnt2==0 && arr[i]!=maj1){
+               maj2=arr[i];
+           }
+           if(maj1==arr[i])cnt1++;
+           else if(maj2==arr[i])cnt2++;
+           else{
+               cnt1--;cnt2--;
+           }
         }
-        
-        if(cnt2>0){
-          int check2=0; 
-          for(int i=0;i<arr.size();i++){
-              if(arr[i]==el2)check2++;
-          }
-          if(check2> (ceil(n/3)))ans.push_back(el2);
+        if(cnt1!=0 || cnt2!=0){
+            cnt1=0;cnt2=0;
+            for(int i=0;i<arr.size();i++){
+               if(arr[i]==maj1)cnt1++;
+               if(arr[i]==maj2)cnt2++;
+            }
+        }
+        if(cnt1>ceil(arr.size()/3) ){
+            ans.push_back(maj1);
+        }
+        if(cnt2>ceil(arr.size()/3) ){
+            ans.push_back(maj2);
         }
         sort(ans.begin(),ans.end());
         return ans;
