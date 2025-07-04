@@ -1,36 +1,34 @@
 class Solution {
   public:
-     bool check(vector<int> &arr,int mid,int m,int k){
-         int cnt=0;int sum=0;
-         for(auto x:arr){
-             if(mid>=x){
-                sum++; 
-             }
-             else{
-                cnt+=(sum/k);
-                sum=0;
-             }
-         }
-         if(sum!=0){
-           cnt+=(sum/k);  
-         }
-         return cnt>=m;
-     }
+    bool check(int mid,vector<int> &arr,int m,int k){
+        int cnt=0;int ans=0;
+        for(auto it:arr){
+          if(it<=mid){
+            cnt++;  
+          }
+          else{
+              ans+=(cnt/k);
+              cnt=0;
+          }
+        }
+        if(cnt!=0)ans+=(cnt/k);
+        return ans>=m;
+    }
     int minDaysBloom(int m, int k, vector<int> &arr) {
         // Code here
-        int high=*max_element(arr.begin(),arr.end());
         int low=*min_element(arr.begin(),arr.end());
-        int ans=-1;
+        int high=*max_element(arr.begin(),arr.end());
+        int day=-1;
         while(low<=high){
-            int mid =low +(high-low)/2;
-            if(check(arr,mid,m,k)){
-                ans=mid;
+            int mid=low+(high-low)/2;
+            if(check(mid,arr,m,k)){
+                day=mid;
                 high=mid-1;
             }
             else{
                 low=mid+1;
             }
         }
-        return ans;
+        return day;
     }
 };
