@@ -1,18 +1,29 @@
 class Solution {
   public:
+    int check(int n,int m){
+        int ans=1;
+        while(n>0){
+            if(n%2!=0){
+                ans=ans*m;
+                n=n-1;
+            }
+            else{
+                m=m*m;
+                n=n/2;
+            }
+        }
+        return ans;
+    }
     int nthRoot(int n, int m) {
         // Code here.
-        int low=1;
-        int high=m;
-        while(low<=high){
-            int mid= low + (high-low)/2;
-            long long check=1;
-            for(int i=1;i<=n;i++){
-                check=check*mid;
-            }
-            if(check==m)return mid;
-            if(check>m)high=mid-1;
-            else low=mid+1;
+        int l=1;
+        int h=m;
+        while(l<=h){
+            int mid=l+(h-l)/2;
+            int expo=check(n,mid);
+            if(expo==m)return mid;
+            if(expo<m)l=mid+1;
+            else h=mid-1;
         }
         return -1;
     }
