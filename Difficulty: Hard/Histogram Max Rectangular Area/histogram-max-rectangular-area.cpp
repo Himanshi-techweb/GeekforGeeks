@@ -28,12 +28,11 @@ class Solution {
     }
     int getMaxArea(vector<int> &arr) {
         // Your code here
-        int n=arr.size();
         int ans=0;
-        vector<int> nse=next_small(arr);
-        vector<int> pse=previous_small(arr);
-        for(int i=0;i<n;i++){
-            ans=max(ans,arr[i]*(nse[i]-pse[i]-1));
+        vector<int> ns=next_small(arr);
+        vector<int> ps=previous_small(arr);
+        for(int i=0;i<arr.size();i++){
+           ans=max(ans,(ns[i]-ps[i]-1)*arr[i]); 
         }
         return ans;
     }
