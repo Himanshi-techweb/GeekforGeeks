@@ -20,22 +20,22 @@ class Solution {
         
     // }
     vector<int> ans;
-    queue<int> q;
-    void right(Node* root,int level){
+    // queue<int> q;
+    void left(Node* root,int level){
        if(root==NULL)return;
-       if(q.size()==level){
-        q.push(root->data);
+       if(ans.size()==level){
+       ans.push_back(root->data);
        }
-       right(root->left,level+1);
-       right(root->right,level+1);
+       left(root->left,level+1);
+       left(root->right,level+1);
        
     }
     vector<int> leftView(Node* root) {
-        right(root,0);
-        while(!q.empty()){
-            ans.push_back(q.front());
-            q.pop();
-        }
+        left(root,0);
+        // while(!q.empty()){
+        //     ans.push_back(q.front());
+        //     q.pop();
+        // }
         return ans;
     }
 };
