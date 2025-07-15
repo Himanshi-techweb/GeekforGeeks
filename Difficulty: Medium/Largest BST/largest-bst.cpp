@@ -10,31 +10,27 @@ struct Node {
         left = right = NULL;
     }
 };*/
-class NodeValue{
-    public:
-    int size;int mini;int maxi;
-    NodeValue(int mini,int maxi,int size){
-        this->mini=mini;this->maxi=maxi;this->size=size;
-    }
-};
+
 class Solution {
-    
   public:
-    NodeValue solve(Node* root){
-        if(root==NULL)return NodeValue(INT_MAX,INT_MIN,0);
-        auto left=solve(root->left);
-        auto right=solve(root->right);
-        if(left.maxi<root->data && right.mini>root->data){
-            return NodeValue(min(root->data,left.mini),max(root->data,right.maxi),left.size+right.size+1);
+    int ans=0;
+    pair<int,pair<int,int>> solve(Node* root){//sizez,maxi,mini
+        if(root==NULL)return {0,{INT_MIN,INT_MAX}};
+        if(!root->left && !root->right)return {1,{root->data,root->data}};
+        auto l=solve(root->left);
+        auto r=solve(root->right);
+        if(l.second.first<root->data && r.second.second>root->data){
+            return {l.first+r.first+1,{max(root->data,r.second.first),min(root->data,l.second.second)}};
         }
-        return NodeValue(INT_MIN,INT_MAX,max(left.size,right.size));
+        else{
+            return {max(l.first,r.first),{INT_MAX,INT_MIN}};
+        }
     }
     /*You are required to complete this method */
     // Return the size of the largest sub-tree which is also a BST
     int largestBst(Node *root) {
         // Your code here
-        NodeValue x=solve(root);
-        return x.size;
-        
+        auto ans=solve(root);
+        return ans.first;
     }
 };
