@@ -18,14 +18,10 @@ class Node {
 class Solution {
   public:
     Node* check(Node* root,Node* p ,Node* q){
-        if(root==NULL || root==p || root==q)return root;
-        Node* left=NULL;Node* right=NULL;
-        if(p->data<root->data && q->data<root->data)left=check(root->left,p,q);
-        else if(p->data>root->data && q->data>root->data)right=check(root->right,p,q);
-        else if((p->data<root->data && q->data>root->data) ||
-        (p->data>root->data && q->data<root->data))return root;
-        if(left)return left;
-        else if(right)return right;
+        if(root==NULL || root->data==p->data || root->data==q->data)return root;
+        if(p->data<root->data && q->data<root->data)return check(root->left,p,q);
+        else if(p->data>root->data && q->data>root->data)return check(root->right,p,q);
+        return root;
     }
     Node* LCA(Node* root, Node* p, Node* q) {
         // code here
