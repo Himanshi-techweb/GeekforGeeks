@@ -1,38 +1,37 @@
 class Solution {
   public:
-    vector<int> next_small(vector<int> &arr){
-        stack<pair<int,int>> st;
-        int n=arr.size();
-        vector<int> nse(n,n);
-        for(int i=n-1;i>=0;i--){
-          while(!st.empty() && st.top().first>arr[i]){
-              st.pop();
-          } 
-          if(!st.empty())nse[i]=st.top().second;
-          st.push({arr[i],i});
-        }
-        return nse;
-    }
-    vector<int> previous_small(vector<int> &arr){
-        stack<pair<int,int>> st;
-        int n=arr.size();
+    int n;
+    vector<int> previoussmaller(vector<int>& arr){
         vector<int> pse(n,-1);
-        for(int i=0;i<n;i++){
-          while(!st.empty() && st.top().first>=arr[i]){
-              st.pop();
-          } 
-          if(!st.empty())pse[i]=st.top().second;
-          st.push({arr[i],i});
+        stack<pair<int,int>> st;
+        for(int i=arr.size()-1;i>=0;i--){
+            while(!st.empty() && st.top().first>arr[i]){
+                auto it=st.top();st.pop();
+                pse[it.second]=i;
+            }
+            st.push({arr[i],i});
         }
         return pse;
     }
+    vector<int> nextsmaller(vector<int>& arr){
+        vector<int> nse(n,n);
+        stack<pair<int,int>> st;
+        for(int i=0;i<n;i++){
+            while(!st.empty() && st.top().first>arr[i]){
+                auto it=st.top();st.pop();
+                nse[it.second]=i;
+            }
+            st.push({arr[i],i});
+        }
+        return nse;
+    }
     int getMaxArea(vector<int> &arr) {
         // Your code here
-        int ans=0;
-        vector<int> ns=next_small(arr);
-        vector<int> ps=previous_small(arr);
+        n=arr.size();int ans=INT_MIN;
+        vector<int> pse=previoussmaller(arr);
+        vector<int> nse=nextsmaller(arr);
         for(int i=0;i<arr.size();i++){
-           ans=max(ans,(ns[i]-ps[i]-1)*arr[i]); 
+          ans=max(ans,arr[i]*(nse[i]-pse[i]-1));  
         }
         return ans;
     }
