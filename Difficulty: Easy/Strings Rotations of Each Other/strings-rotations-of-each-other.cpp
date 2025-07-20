@@ -1,41 +1,34 @@
-
 class Solution {
   public:
-    vector<int> longestprefixsuffix(string &pattern){
-        int size=pattern.size();
-        vector<int> lps(size,0);
-        lps[0]=0;int i=1;int len=0;
-        while(i<size){
-            if(pattern[i]==pattern[lps[i-1]]){
-                len++;
-                lps[i]=len;
-                i++;
+    vector<int> longestcommonprefixsuffix(string &pattern){
+      vector<int> lps(pattern.size(),0);
+      lps[0]=0;int len=0;
+      for(int i=1;i<pattern.size();){
+          if(pattern[i]==pattern[len]){
+              len++;
+              lps[i]=len;
+              i++;
+          }
+          else{
+              if(len==0){
+                  lps[i]=0;i++;
+              }
+              else{
+                  len=lps[len-1];
+              }
+          }
+      }
+      return lps;
+    }
+    bool kmp(string &pattern,string &text){
+        vector<int> lps=longestcommonprefixsuffix(pattern);
+        int j=0;
+        for(int i=0;i<text.size();){
+            if(pattern[j]==text[i]){
+                i++;j++;
+                if(j==pattern.size())return true;
             }
             else{
-                if(len==0){
-                    lps[i]=0;
-                    i++;
-                }
-                else{
-                    len=lps[len-1];
-                }
-            }
-        }
-        return lps;
-    }
-    bool kmp(const string &text,string &pattern){
-        vector<int> lps=longestprefixsuffix(pattern);
-        int i=0;int j=0;
-        while(i<text.size()){
-            if(text[i]==pattern[j]){
-                i++;j++;
-                if(j==pattern.size()){
-                    // result.push_back(j-i);
-                    // j=lps[j-1];
-                    return true;
-                }
-            }
-            else if(text[i]!=pattern[j]){
                 if(j==0)i++;
                 else{
                     j=lps[j-1];
@@ -44,9 +37,10 @@ class Solution {
         }
         return false;
     }
-    // Function to check if two strings are rotations of each other or not.
     bool areRotations(string &s1, string &s2) {
-        // Your code here
-        return kmp(s2+s2,s1);
+        // code here
+        string s3=s1;
+        s3=s3+s1;
+        return kmp(s2,s3);
     }
 };
