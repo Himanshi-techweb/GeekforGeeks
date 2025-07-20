@@ -2,15 +2,13 @@ class Solution {
   public:
     void mergeArrays(vector<int>& a, vector<int>& b) {
         // code here
-        int i=a.size()-1;int j=0;
-        while(i>=0 && j<b.size() ){
-          if(a[i]>b[j]){
-              swap(a[i],b[j]);
-              i--;j++;
-          } 
-          else{
-              break;
-          }
+        int l=a.size()-1;int r=0;
+        while(l>=0 && r<b.size()){
+            if(a[l]>b[r]){
+                swap(a[l],b[r]);
+                l--;r++;
+            }
+            else break;
         }
         sort(a.begin(),a.end());
         sort(b.begin(),b.end());
