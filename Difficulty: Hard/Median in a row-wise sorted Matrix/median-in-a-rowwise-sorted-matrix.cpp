@@ -2,34 +2,37 @@
 
 class Solution {
   public:
-    int countltq_x(vector<vector<int>> &mat,int mid){
+    bool check(int mid,vector<vector<int>> &mat,int m,int total){
         int cnt=0;
-        for(int i=0;i<mat.size();i++){
-            int ub=upper_bound(mat[i].begin(),mat[i].end(),mid)-mat[i].begin();
-            cnt+=ub;
+        for(int i=0;i<m;i++){
+           auto it=upper_bound(mat[i].begin(),mat[i].end(),mid);
+           cnt+=(it-mat[i].begin());
         }
-        return cnt;
+        return cnt<=total/2;
     }
     int median(vector<vector<int>> &mat) {
         // code here
         int m=mat.size();int n=mat[0].size();
-        int x=(m*n)/2;int ans=0;
-        int low=INT_MAX;int high=INT_MIN;
+        int mini=INT_MAX;int maxi=INT_MIN;
+        int total=m*n;
         for(int i=0;i<m;i++){
-            low=min(low,mat[i][0]);
-            high=max(high,mat[i][n-1]);
+            mini=min(mini,mat[i][0]);
         }
-        while(low<=high){
-            int mid=low+(high-low)/2;
-            int cnt=countltq_x(mat,mid);
-            if(cnt<x+1){
-              ans=mid;
-              low=mid+1;  
-            }
-            else{
-                high=mid-1;
-            }
+        for(int i=0;i<m;i++){
+            maxi=max(maxi,mat[i][n-1]);
         }
-        return low;
+        int l=mini;int r=maxi;int ans=0;
+        while(l<=r){
+           int mid=(l+r)/2;
+           if(check(mid,mat,m,total)){
+               ans=mid;
+               l=mid+1; 
+           }
+           else{
+              r=mid-1;
+              
+           }
+        }
+        return l;
     }
 };
