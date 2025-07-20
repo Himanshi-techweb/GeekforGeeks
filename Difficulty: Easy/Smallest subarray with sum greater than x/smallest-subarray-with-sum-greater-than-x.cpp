@@ -2,18 +2,19 @@ class Solution {
   public:
     int smallestSubWithSum(int x, vector<int>& arr) {
         // Your code goes here
-        int i=0;int j=0;
-        int sum=0;int minlen=INT_MAX;
-        while(j<arr.size()){
-            sum+=arr[j];
+        int sum=0;int i=0;
+        map<int,int> check;int mini=INT_MAX;
+        for(int i=0;i<arr.size();i++){
+            sum+=arr[i];
+            check[sum]=i;
             if(sum>x){
-                while(sum>x){
-                    sum-=arr[i];i++;
-                }
-                minlen=min(j-i+2,minlen);
+              auto it=check.lower_bound(sum-x);
+              if(it!=check.end()){
+                  mini=min(mini,i-it->second+1);
+              }
             }
-            j++;
+            
         }
-        return (minlen!=INT_MAX)?minlen:0;
+        return mini==INT_MAX?0:mini;
     }
 };
