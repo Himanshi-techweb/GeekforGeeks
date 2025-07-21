@@ -1,83 +1,54 @@
 class Solution {
   public:
-    string findOrder(vector<string> &arr) {
+    
+    string findOrder(vector<string> &words) {
         // code here
-        // unordered_map<char,vector<char>>check;
-        vector<vector<int>> check(26);
-        vector<int> in(26,-1);
-        for(int i=1;i<arr.size();i++){
-            string text1=arr[i-1];
-            string text2=arr[i];
-            bool found=false;
-            int len=min(text1.length(),text2.length());
+        vector<int> use(26,0);
+        vector<vector<int>> adj(26);
+        vector<int>in(26,0);int i=0;
+        for(auto word:words){
+            for(auto ch:word)use[ch-'a']=1;
+        }
+        while(i<words.size()-1){
+            string text1=words[i];string text2=words[i+1];
+            int len=min(text1.size(),text2.size());
+            bool flag=false;
             for(int j=0;j<len;j++){
                 if(text1[j]!=text2[j]){
-                   check[text1[j]-'a'].push_back(text2[j]-'a');
-                   if(in[text2[j]-'a']==-1)in[text2[j]-'a']=1;
-                   else{in[text2[j]-'a']++;}
-                   if(in[text1[j]-'a']==-1)in[text1[j]-'a']=0;
-                   found=true;
-                   break;
+                    flag=true;
+                    adj[text1[j]-'a'].push_back(text2[j]-'a');
+                    in[text2[j]-'a']++;
+                    // use[text1[j]-'a']=1;use[text2[j]-'a']=1;
+                    break;
                 }
             }
-            if(!found && text1.size()>text2.size())return "";
+            if(!flag && text1.size()>text2.size())return "";
+            i++;
         }
-        queue<int> q;
-        for(auto x:arr){
-            for(auto y:x){
-                if(in[y-'a']==-1)in[y-'a']=0;
+        
+        ////
+        queue<int>q;string ans="";
+        for(int i=0;i<26;i++){
+            if(use[i] && in[i]==0){
+                q.push(i);
             }
         }
-        for(int i=0;i<in.size();i++){
-            if(in[i]==0)q.push(i);
-        }
-        vector<int> topo;
         while(!q.empty()){
-            int front=q.front();q.pop();
-            topo.push_back(front);
-            for(auto it:check[front]){
+            auto front=q.front();q.pop();
+            ans.push_back(front+'a');
+            for(auto it:adj[front]){
                 in[it]--;
-                if(in[it]==0)q.push(it);
+                if(in[it]==0){
+                    q.push(it);
+                }
             }
         }
-        string ans="";
-        for(int i:in){
-            if(i>0)return "";
+        int cnt=0;
+        for(int i=0;i<use.size();i++){
+            if(use[i]==1)cnt++;
         }
-        for(auto x:topo){
-            char ch='a'+x;
-            ans+=ch;
-        }
-        
-        return ans;
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        if(cnt>ans.size())return "";
+        else return ans;
         
     }
 };
