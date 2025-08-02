@@ -2,27 +2,25 @@
 
 class Solution {
   public:
+     const int MOD=100000;
     int minimumMultiplications(vector<int>& arr, int start, int end) {
         // code here
-        queue<pair<int,int>> q;
-        vector<int> check(1e5,INT_MAX);
-        q.push({0,start});
-        check[start]=0;
-        while(!q.empty()){
-            int level=q.front().first;
-            int node=q.front().second;
-           // if(node==end)return level;
-            q.pop();
-            for(int i=0;i<arr.size();i++){
-                int newstart=(node*arr[i])%100000;
-                if(check[newstart]>level+1){
-                    q.push({level+1,newstart});
-                    if(newstart==end)return level+1;
-                    check[newstart]=level+1;
-                }
-            }
-        }
-        if(check[end]!=INT_MAX)return check[end];
-        return -1;
+       priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>> >q;
+       q.push({0,start});
+       vector<int> dist(1e5 + 1,INT_MAX);
+       dist[start]=0;
+       while(!q.empty()){
+           auto front=q.top();q.pop();
+           int x=front.second;int step=front.first;
+           if(x==end)return step;
+           for(auto it:arr){
+              int y=(x*it)%MOD;
+              if(dist[y]>dist[x]+1){
+                q.push({dist[x]+1,y});
+                dist[y]=(dist[x]+1)%MOD;
+              }
+           }
+       }
+       return -1;
     }
 };
