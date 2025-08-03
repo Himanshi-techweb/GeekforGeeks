@@ -19,13 +19,16 @@ class Solution {
     // equal to the sum of their child nodes.
     bool check(Node* root){
         if(root==NULL)return true;
-        if(!root->left && !root->right)return true;
-        int left=0;int right=0;
-        if(root->left)left=root->left->data;if(root->right)right=root->right->data;
-        if(root->data!=left+right)return false;
-        if(!check(root->left) || !check(root->right))return false;
+        if(root->left==NULL && root->right==NULL)return true;
+        int left=0;
+        if(root->left )left=root->left->data;
+        // else if(root->left && root->left->left) left=2*root->left->data;
+        int right=0;
+        if(root->right )right=root->right->data;
+        // else if(root->right && root->right->right) right=2*root->right->data;
         
-        return true;
+        bool condi=(root->data==left+right);
+        return check(root->left)&& check(root->right) && condi;
     }
     int isSumProperty(Node *root) {
         // Add your code here
