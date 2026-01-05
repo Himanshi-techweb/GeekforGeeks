@@ -1,21 +1,27 @@
 class Solution {
   public:
     void sort012(vector<int>& arr) {
-        int low=0;int mid=0;int high=arr.size()-1;
-        while(mid<=high){
+        // code here
+        int low=-1;
+        int high=arr.size();
+        int mid=0;
+        int i=0;
+         while(mid<high){
             if(arr[mid]==0){
-                swap(arr[low],arr[mid]);
+                swap(arr[mid],arr[low+1]);
                 low++;
                 mid++;
+                
             }
             else if(arr[mid]==1){
-               mid++; 
+                mid++;
             }
             else{
-                swap(arr[high],arr[mid]);
                 high--;
+                arr[mid]=arr[high];
+                arr[high]=2;
+                
             }
         }
-        
     }
 };
