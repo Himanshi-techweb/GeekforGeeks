@@ -4,20 +4,34 @@ class Solution {
   public:
     vector<vector<int>> getPairs(vector<int>& arr) {
         // code here
-        sort(arr.begin(),arr.end());
         vector<vector<int>> ans;
-        int i=0;int j=arr.size()-1;
-        while(i<j){
-          int sum=arr[i]+arr[j];
-          if(sum==0){
-              int a=arr[i];int b=arr[j];
-              ans.push_back({a,b});
-              while(i<j && arr[i]==a)i++;
-              while(i<j && arr[j]==b)j--;
-          }
-          else if(sum>0)j--;
-          else i++;
+        unordered_map<int,int> check;
+        for(int i=0;i<arr.size();i++){
+            check[arr[i]]++;
+            
         }
+        
+        //check case of 0 
+        int count=check[0];
+            for(int i=0;i<count/2;i++){
+                ans.push_back({0,0});
+            }
+        
+        // vector<vector<int>> ans;
+        for(int i=0;i<arr.size();i++){
+            int x=arr[i];
+            if(x==0)continue;
+            if(check.find(-x)!=check.end()){
+                vector<int> arr1;
+                arr1.push_back(x);arr1.push_back(-x);
+                
+                sort(arr1.begin(),arr1.end());
+                ans.push_back(arr1);
+                check.erase(x);check.erase(-x);
+            }
+        }
+        
+        sort(ans.begin(),ans.end());
         return ans;
     }
 };
