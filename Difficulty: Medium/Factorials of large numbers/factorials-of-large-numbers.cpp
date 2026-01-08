@@ -2,35 +2,40 @@
 
 class Solution {
   public:
-    void carry(int multiplier,vector<int> &arr,int &size){
-       int carry=0;
-       for(int i=0;i<size;i++){
-           int quot=arr[i]*multiplier;
-           quot=quot+carry;
-           arr[i]=quot%10;
-           carry=quot/10;
-       }
-       while(carry>0){
-           arr[size]=carry%10;
-           size++;
-           carry=carry/10;
-       }
-        
+    void multiply(int i,vector<int> &arr){
+      int carry=0;int r=0;int y=0;
+      vector<int> check;
+      for(int j=0;j<arr.size();j++){
+          y=i*arr[j];
+          y=y+carry;carry=0;
+          r=y%10;int q=y/10;
+          check.push_back(r);
+          carry+=q;
+      }
+      if(carry>0){
+          while(carry>0){
+              r=carry%10;carry=carry/10;
+              check.push_back(r);
+          }
+      }
+      arr=check;
     }
     vector<int> factorial(int n) {
         // code here
-        vector<int> arr(1e6,0);
-        arr[0]=1;
-        int size=1;
-        for(int i=2;i<n+1;i++){
-            carry(i,arr,size);
-        }
-        vector<int> ans;
-        for(int i=size-1;i>=0;i--){
-            ans.push_back(arr[i]);
-        }
-        return ans;
         
-        
+        if(n==1)return {1};
+        int k=n;
+        vector<int> arr;
+        //store entire bits of n
+        while(k>0){
+            int r=k%10;
+            k=k/10;
+            arr.push_back(r);
+        }
+        for(int i=n-1;i>=1;i--){
+            multiply(i,arr);
+        }
+        reverse(arr.begin(),arr.end());
+        return arr;
     }
 };
