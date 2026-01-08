@@ -2,22 +2,17 @@ class Solution {
   public:
     int maxProduct(vector<int> &arr) {
         // code here
-       int prefix=1;int suffix=1;
-       int maxi=INT_MIN;
-       for(int i=0;i<arr.size();i++){
-           prefix=prefix*arr[i];
-           maxi=max(maxi,prefix);
-           if(prefix==0){
-               prefix=1;
-           }
-       }
-       for(int i=arr.size()-1;i>=0;i--){
-           suffix=suffix*arr[i];
-           maxi=max(maxi,suffix);
-           if(suffix==0){
-               suffix=1;
-           }
-       }
-        return maxi;
+        int maxsofar=arr[0];
+        int maxend=arr[0];
+        int minend=arr[0];
+        int tempmax=arr[0];int tempmin=arr[0];
+        for(int i=1;i<arr.size();i++){
+            tempmax=max({arr[i],arr[i]*maxend,arr[i]*minend});
+            tempmin=min({arr[i],arr[i]*maxend,arr[i]*minend});
+            maxend=tempmax;minend=tempmin;
+            maxsofar=max(maxsofar,maxend);
+        }
+        
+        return maxsofar;
     }
 };
