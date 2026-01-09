@@ -4,20 +4,21 @@ class Solution {
     // that array is divided into three parts.
     void threeWayPartition(vector<int>& arr, int a, int b) {
         // code here
-        vector<int> less;
-        vector<int> great;
-        vector<int> range;
-        if(a>b)swap(a,b);
-        for(int i=0;i<arr.size();i++){
-            if(arr[i]<a)less.push_back(arr[i]);
-            else if(arr[i]>=a && arr[i]<=b)range.push_back(arr[i]);
-            else great.push_back(arr[i]);
+        
+        int l=-1;int mid=0;int high=arr.size()-1;
+        while(mid<=high){
+           if(arr[mid]<a){
+               l++;
+               swap(arr[l],arr[mid]);
+               mid++;
+           } 
+           else if(arr[mid]>=a && arr[mid]<=b)mid++;
+           else{
+               
+               swap(arr[high],arr[mid]);
+               high--;
+           }
         }
-        arr.clear();
-        for(int i=0;i<less.size();i++)arr.push_back(less[i]);
-        for(int i=0;i<range.size();i++)arr.push_back(range[i]);
-        for(int i=0;i<great.size();i++)arr.push_back(great[i]);
-        // for(auto t:arr)cout<<t<<" ";
 
     }
 };
