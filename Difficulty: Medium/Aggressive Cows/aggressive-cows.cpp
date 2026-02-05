@@ -1,35 +1,38 @@
-// User function Template for C++
-
 class Solution {
   public:
-    bool check(int mid,vector<int> &arr,int k){
-        int cnt=1;int prev=arr[0];
-        for(int i=1;i<arr.size();i++){
-            if(arr[i]-prev>=mid){
-                cnt++;
-                prev=arr[i];
-            }
-            if(cnt>=k)return true;
-        }
-        return false;
+    bool check(int maxi,vector<int> &arr,int k){
+       //lets cow initially at arr[0];
+       int count=1;
+       int prev=arr[0];
+       for(int i=1;i<arr.size();i++){
+           if(arr[i]-prev>=maxi){
+               count++;
+               prev=arr[i];
+           }
+       }
+       return count>=k;
     }
     int aggressiveCows(vector<int> &arr, int k) {
-
-        // Write your code here
+        // code here
         sort(arr.begin(),arr.end());
-        int low=1;
-        int high=arr[arr.size()-1]-arr[0];
-        int dist=1;
+        int n=arr.size();
+        int maxi=arr[n-1]-arr[0];
+        int low=INT_MAX;
+        for(int i=0;i+1<n;i++){
+            low=min(low,arr[i+1]-arr[i]);
+        }
+        int high=maxi;
         while(low<=high){
-            int mid=low+(high-low)/2;
+            int mid=(low+high)/2;
             if(check(mid,arr,k)){
-                dist=mid;
+                maxi=mid;
                 low=mid+1;
             }
-            else{
-                high=mid-1;
-            }
+            else high=mid-1;
         }
-        return dist;
+        return maxi;
     }
 };
+
+
+// 1 2 5 7 10
