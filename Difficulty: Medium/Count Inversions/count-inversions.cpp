@@ -1,43 +1,54 @@
 class Solution {
   public:
-    int merge(int low,int mid,int high,vector<int> &arr){
-        vector<int> a(arr.begin()+low,arr.begin()+mid+1);
-        vector<int> b(arr.begin()+mid+1,arr.begin()+high+1);
-        int i=0;int j=0;
-        int cnt=0;
-        // vector<int> ans;
-        int k=low;
-        while(i<a.size() && j<b.size()){
-            if(a[i]<=b[j]){
-                arr[k++]=(a[i]);
+    int cnt=0;
+    void merge(int low,int mid,int high,vector<int>&arr){
+        //a is low to mid
+        //b is mid+1 to high
+        vector<int> ans;
+        int i=low;int j=mid+1;
+        while(i<=mid && j<=high){
+            if(arr[i]>arr[j]){
+                cnt+=(mid-i+1);
+                j++;
+            }
+            else i++;
+        }
+        i=low;j=mid+1;
+        while(i<=mid && j<=high){
+            if(arr[i]<arr[j]){
+                ans.push_back(arr[i]);
                 i++;
             }
             else{
-              cnt+=(a.size()-i);
-              arr[k++]=(b[j]);
-              j++;
+                ans.push_back(arr[j]);
+                j++;
             }
+            
         }
-        while(i<a.size()){
-            arr[k++]=(a[i]);i++;
+        while(i<=mid){
+            ans.push_back(arr[i]);
+            i++;
         }
-        while(j<b.size()){
-            arr[k++]=(b[j]);j++;
+        while(j<=high){
+            ans.push_back(arr[j]);
+            j++;
         }
-        return cnt;
+        int k=0;
+        for(int i=low;i<=high;i++){
+            arr[i]=ans[k++];
+        }
     }
-    int mergesort(int low,int high,vector<int> &arr){
-        int cnt=0;
-        if(low>=high)return cnt;
-        int mid=low+(high-low)/2;
-        cnt+=mergesort(low,mid,arr);
-        cnt+=mergesort(mid+1,high,arr);
-        cnt+=merge(low,mid,high,arr);
-        return cnt;
+    void mergesort(int low,int high,vector<int> &arr){
+        if(low<high){
+            int mid=(low+high)/2;
+            mergesort(low,mid,arr);
+            mergesort(mid+1,high,arr);
+            merge(low,mid,high,arr);
+        }
     }
-    // Function to count inversions in the array.
     int inversionCount(vector<int> &arr) {
-        // Your Code Here
-        return mergesort(0,arr.size()-1,arr);
+        // code here
+        mergesort(0,arr.size()-1,arr);
+        return cnt;
     }
 };
