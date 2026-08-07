@@ -2,16 +2,16 @@ class Solution {
   public:
     long subarrayXor(vector<int> &arr, int k) {
         // code here
-        unordered_map<int,int> check;
-        int x=0;int cnt=0;
-        check[0]=1;
+        unordered_map<int,int> q;
+        long ans=0;
+        int xor1=0;
         for(int i=0;i<arr.size();i++){
-            x=x^arr[i];
-            if(check.find(x^k)!=check.end()){
-                cnt+=(check[x^k]);
-            }
-            check[x]++;
+            xor1=xor1^arr[i];
+            if(xor1==k)ans++;
+            if(q.find(xor1^k)!=q.end())ans+=q[xor1^k];
+            q[xor1]++;
+            
         }
-        return cnt;
+        return ans;
     }
 };
