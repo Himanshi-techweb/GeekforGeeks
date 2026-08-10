@@ -1,37 +1,35 @@
 class Solution {
   public:
-    bool check(int j,vector<int>&arr,int k){
-        int count=0;int sum=0;
+    bool solve(long long mid,vector<int>&arr,int k){
+        int cnt=0;long long sum=0;
         for(int i=0;i<arr.size();i++){
-           if(sum+arr[i]>j){
-               count++;
-               sum=arr[i];
-           }
-           else sum=sum+arr[i];
+            if(arr[i]>mid)return false;
+            if(sum+arr[i]>mid){
+                cnt++;
+                sum=arr[i];
+            }
+            else sum+=arr[i];
         }
-        count++;
-        // cout<<count<<" "<<j<<endl;
-        return count<=k;
+        if(sum<=mid)cnt++;
+        
+        // cout<<mid<<" "<<cnt<<endl;
+        return cnt<=k;
     }
     int findPages(vector<int> &arr, int k) {
         // code here
-        if(arr.size()<k)return -1;
-        int low=*max_element(arr.begin(),arr.end());
-        // int low=0;
-
-        int high=accumulate(arr.begin(),arr.end(),0);
-        // cout<<low<<" "<<high<<" ";
-        int maxi=high;
-        while(low<=high){
-            int mid=(low+high)/2;
-            if(check(mid,arr,k)){
-                maxi=mid;
-                high=mid-1;
-              
+        // sort(arr.begin(),arr.end());
+        if(k>arr.size())return -1;
+        int l=*min_element(arr.begin(),arr.end());
+        long long h=accumulate(arr.begin(),arr.end(),0LL);
+        int ans=-1;
+        while(l<=h){
+            long long mid=(l+h)/2;
+            if(solve(mid,arr,k)){
+               ans=mid;
+               h=mid-1;
             }
-            else 
-            low=mid+1;
+            else l=mid+1;
         }
-        return maxi;
+        return ans;
     }
 };
