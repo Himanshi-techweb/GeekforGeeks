@@ -1,40 +1,43 @@
-/* A binary tree node structure
-
+/* Structure of binary tree node
 class Node {
   public:
     int data;
     Node* left;
     Node* right;
 
-    // Constructor to initialize a new node
     Node(int val) {
         data = val;
-        left = NULL;
-        right = NULL;
+        left = right = nullptr;
     }
-};
- */
+};*/
 
 class Solution {
   public:
-    int height(Node* root){
+    int solve1(Node* root){
         if(root==NULL)return 0;
-        int lh=height(root->left);
-        if(lh==-1)return -1;
-        int rh=height(root->right);
-        if(rh==-1)return -1;
-        if(abs(lh-rh)>1)return -1;
-        return 1+max(lh,rh);
+        int left=solve1(root->left);
+        int right=solve1(root->right);
+        return 1+max(left,right);
     }
+    bool solve2(Node* root){
+        if(root==NULL)return true;
+        int left=solve1(root->left);
+        int right=solve1(root->right);
+        if(abs(right-left)>1)return false;
+        return (solve2(root->left)&& solve2(root->right));
+    }
+    // int solve(Node* root){
+    //     if(root==NULL)return 0;
+    //     int left=solve(root->left);
+    //     int right=solve(root->right);
+    //     if(abs(right-left)>1)return -1;
+    //     if(left==-1 || right==-1)return 0;
+    //     return 1+max(left,right);
+    // }
     bool isBalanced(Node* root) {
-        // Code here
-        // if(root==NULL)return true;
-        // int left=height(root->left);
-        // int right=height(root->right);
-        // bool cond=(abs(left-right)<=1);
-        // return cond&&isBalanced(root->left)&&isBalanced(root->right);
-        int h=height(root);
-        if(h!=-1)return true;
-        return false;
+        // code here
+        return solve2(root);
+        
+        
     }
 };
