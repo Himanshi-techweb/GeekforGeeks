@@ -1,58 +1,80 @@
-/*
-// Tree Node
+/* Node Structure
 class Node {
   public:
     int data;
-    Node* left;
-    Node* right;
-
-    // Constructor to initialize a new node
+    Node* left, *right;
     Node(int val) {
         data = val;
-        left = NULL;
-        right = NULL;
+        left = right = nullptr;
     }
-};
-*/
+}; */
 
 class Solution {
   public:
-    void leftcheck(Node* root,vector<int> &result){
-      //vector<int> left;
-      Node* curr=root->left;
-      while(curr){
-        if(curr->left!=NULL || curr->right!=NULL)result.push_back(curr->data);
-        if(curr->left)curr=curr->left;
-        else curr=curr->right;
-      }
-      //result.insert(result.end(),left.begin(),left.end());
+    vector<int> leftside(Node* root){
+        if(root==NULL || root->left==NULL)return {};
+        Node* curr=root->left;
+        vector<int> l;
+        while(curr){
+           
+           if(curr->left==NULL && curr->right==NULL)break;
+           l.push_back(curr->data);
+           if(curr->left)curr=curr->left;
+           else curr=curr->right;
+        }
+        return l;
     }
-    void leafcheck(Node* root,vector<int> &result){
-        if(root==NULL)return;
-      if(root->left==NULL && root->right==NULL)result.push_back(root->data);
-      if(root->left)leafcheck(root->left,result);
-      if(root->right)leafcheck(root->right,result);
+    vector<int> rightside(Node* root){
+        if(root==NULL || root->right==NULL )return {};
+        Node* curr=root->right;
+        vector<int> r;
+        while(curr){
+           
+           if(curr->left==NULL && curr->right==NULL)break;
+           r.push_back(curr->data);
+           if(curr->right)curr=curr->right;
+           else curr=curr->left;
+           
+        }
+        reverse(r.begin(),r.end());
+        // r.pop_back();
+        return r;
     }
-    void rightcheck(Node* root,vector<int> &result){
-      vector<int> right;
-      Node* curr=root->right;
-      while(curr){
-        if(curr->left!=NULL || curr->right!=NULL)right.push_back(curr->data);
-        if(curr->right)curr=curr->right;
-        else curr=curr->left;
-      }
-      reverse(right.begin(),right.end());
-      result.insert(result.end(),right.begin(),right.end()); 
+    vector<int> leaf;
+    void in(Node* root){
+        
+        if(root==NULL )return;
+        in(root->left);
+        if(root->left==NULL && root->right==NULL){
+            leaf.push_back(root->data);
+            return;
+        }
+        in(root->right);
+        
     }
+    // vector<int> leafside(Node* root){
+    //     if(root==NULL)return {};
+    //     vector<int>leaf;
+    //     Node* curr=root;
+    //     while(curr){
+    //         if(curr->left==NULL && curr->right==NULL){
+                
+    //         }
+    //     }
+    // }
     vector<int> boundaryTraversal(Node *root) {
         // code here
         if(root==NULL)return {};
-        vector<int> result;
-        if(root->left!=NULL || root->right!=NULL )result.push_back(root->data);
-        leftcheck(root,result);
-        leafcheck(root,result);
-        rightcheck(root,result);
-        return result;
+        vector<int>ans;
+        if(root->left==NULL && root->right==NULL)return {root->data};
+        ans.push_back(root->data);
+        vector<int>l=leftside(root);
+        vector<int>r=rightside(root);
+        in(root);
+        ans.insert(ans.end(),l.begin(),l.end());
+        ans.insert(ans.end(),leaf.begin(),leaf.end());
+        ans.insert(ans.end(),r.begin(),r.end());
+        return ans;
         
     }
 };
