@@ -1,47 +1,47 @@
-/* BST Node
-class Node
-{
-   public:
+/* Structure of a Binary Search Tree node
+class Node {
+public:
     int data;
-    Node *left;
-    Node *right;
+    Node* left;
+    Node* right;
 
-    Node(int x){
+    Node(int x) {
         data = x;
-        left = NULL;
-        right = NULL;
+        left = nullptr;
+        right = nullptr;
     }
 }; */
 
 class Solution {
   public:
-    Node* succ=NULL;Node* pre=NULL;
-    void check(Node *root,int x){
+    Node* ans1=NULL;
+    Node* ans2=NULL;
+    void solve1(Node* root,int key){
         if(root==NULL)return;
-        if(root->data>x){
-            succ=root;
-            check(root->left,x);
+        if(root->data<key){
+            ans1=root;
+            solve1(root->right,key);
         }
-        if(root->data<=x){
-          check(root->right,x);  
+        else {
+            
+            solve1(root->left,key);
+           
         }
     }
-    void check2(Node *root,int x){
+    
+    void solve2(Node* root,int key){
         if(root==NULL)return;
-        if(root->data>=x){
-            check2(root->left,x);
+        if(root->data>key){
+            ans2=root;
+            solve2(root->left,key);
         }
-        if(root->data<x){
-          pre=root;  
-          check2(root->right,x);  
-        }
+        else solve2(root->right,key);
     }
     vector<Node*> findPreSuc(Node* root, int key) {
         // code here
-        if(root==NULL)return {pre,succ};
-        check(root,key);
-        check2(root,key);
-        return {pre,succ};
+        solve1(root,key);
+        solve2(root,key);
+        return {ans1,ans2};
         
     }
 };
