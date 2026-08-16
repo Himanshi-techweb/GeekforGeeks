@@ -1,13 +1,14 @@
-/*Complete the function below
-
-struct Node {
+/*
+Definition for Node
+class Node {
+  public:
     int data;
-    Node *left;
-    Node *right;
+    Node* left;
+    Node* right;
 
     Node(int val) {
         data = val;
-        left = right = NULL;
+        left = right = nullptr;
     }
 };
 */
@@ -15,21 +16,25 @@ struct Node {
 class Solution {
   public:
     int ans=-1;
-    void small(Node* root,int &count,int k){
-        if(root==NULL|| count>k)return;
-        small(root->left,count,k);
-        count++;
-        if(count==k){
+    void solve(Node* root,int &k){
+        if(root==NULL || k<0)return ;
+        
+        
+        solve(root->left,k);
+        k--;
+        if(k==0){
             ans=root->data;
             return;
         }
-        small(root->right,count,k);
+        
+        
+        solve(root->right,k);
+        
     }
-    // Return the Kth smallest element in the given BST
     int kthSmallest(Node *root, int k) {
-        // add code here.
-        int count=0;
-        small(root,count,k);
+        // code here
+        int x=k;
+        solve(root,x);
         return ans;
     }
 };
