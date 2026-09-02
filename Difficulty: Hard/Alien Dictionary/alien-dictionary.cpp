@@ -1,54 +1,69 @@
 class Solution {
   public:
-    
     string findOrder(vector<string> &words) {
         // code here
-        vector<int> use(26,0);
+        int n=words.size();
+        string str="";
+        vector<bool> use(26,0);
+        vector<int> in(26,0);
         vector<vector<int>> adj(26);
-        vector<int>in(26,0);int i=0;
-        for(auto word:words){
-            for(auto ch:word)use[ch-'a']=1;
+        for(auto it:words){
+            for(auto i:it){
+                use[i-'a']=true;
+            }
         }
-        while(i<words.size()-1){
-            string text1=words[i];string text2=words[i+1];
-            int len=min(text1.size(),text2.size());
+        for(int i=0;i<n-1;i++){
+            string str1=words[i];
+            string str2=words[i+1];
+            int len=min(str1.size(),str2.size());
+            int k=0;
             bool flag=false;
-            for(int j=0;j<len;j++){
-                if(text1[j]!=text2[j]){
-                    flag=true;
-                    adj[text1[j]-'a'].push_back(text2[j]-'a');
-                    in[text2[j]-'a']++;
-                    // use[text1[j]-'a']=1;use[text2[j]-'a']=1;
-                    break;
+            while(k<len ){
+                use[str1[k]-'a']=true;
+                use[str2[k]-'a']=true;
+                if(str1[k]==str2[k])k++;
+                else{
+                   
+                   in[str2[k]-'a']++;
+                   flag=true;
+                   adj[str1[k]-'a'].push_back(str2[k]-'a');
+                   break;
+                } 
+                
+                
+            }
+            if(flag==false && str2.size()>str1.size()){
+                while(k<str2.size()){
+                    use[str2[k]-'a']=true;
+                    k++;
                 }
             }
-            if(!flag && text1.size()>text2.size())return "";
-            i++;
+            else if(flag==false  && str1.size()>str2.size())return "";
         }
-        
-        ////
-        queue<int>q;string ans="";
+        queue<int> q;
         for(int i=0;i<26;i++){
-            if(use[i] && in[i]==0){
+            if(use[i]==true && in[i]==0){
                 q.push(i);
             }
         }
+        
+        
         while(!q.empty()){
-            auto front=q.front();q.pop();
-            ans.push_back(front+'a');
+            auto front=q.front();
+            q.pop();
+            char ch=front+'a';
+            str.push_back(ch);
             for(auto it:adj[front]){
                 in[it]--;
-                if(in[it]==0){
-                    q.push(it);
-                }
+                if(in[it]==0)q.push(it);
             }
         }
-        int cnt=0;
-        for(int i=0;i<use.size();i++){
-            if(use[i]==1)cnt++;
+        
+        for(auto i=0;i<26;i++){
+            if(in[i]>0)return "";
         }
-        if(cnt>ans.size())return "";
-        else return ans;
+        // for(auto it:str)cout<<it<<" ";
+        return str;
         
     }
 };
