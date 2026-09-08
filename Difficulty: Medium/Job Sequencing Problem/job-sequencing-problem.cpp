@@ -1,39 +1,36 @@
-
 class Solution {
   public:
-    vector<int> parent;
-    int find(int node){
-        if(parent[node]==node)return node;
-        return parent[node]=find(parent[node]);
+    static bool comparator(vector<int> &a,vector<int>&b){
+        return a[0]>b[0];
     }
-    void merge(int u,int v){
-        parent[u]=v;
+    int find(vector<int> &x,int y){
+        if(x[y]==y)return y;
+        return x[y]=find(x,x[y]);
     }
-    vector<int> jobSequencing(vector<int> &line, vector<int> &profit) {
+    vector<int> jobSequencing(vector<int> &ti, vector<int> &profit) {
         // code here
-       int maxi=*max_element(line.begin(),line.end());;
-       parent.resize(maxi+1);
-       for(int i=0;i<=maxi;i++)parent[i]=i;
-       vector<tuple<int,int,int>> check;
-       for(int i=0;i<profit.size();i++){
-           check.push_back(make_tuple(profit[i],line[i],i));
-           
-       }
-       sort(check.begin(),check.end(),[](auto &a,auto &b){
-           return get<0>(a)>get<0>(b);
-       });
-       int cnt=0;int maxprofit=0;
-       for(int i=0;i<check.size();i++){
-           int p=get<0>(check[i]);
-           int c=get<1>(check[i]);
-           int ix=get<2>(check[i]);
-           int availableslot=find(c);
-           if(availableslot>0){
-               merge(availableslot,availableslot-1);
-               maxprofit=maxprofit+p;
-               cnt++;
-           }
-       }
-       return {cnt,maxprofit};
+        vector<vector<int>> arr;
+        int maxi=0;
+        for(int i=0;i<profit.size();i++){
+            arr.push_back({profit[i],ti[i],i});
+            maxi=max(maxi,ti[i]);
+        }
+        sort(arr.begin(),arr.end(),comparator);
+        vector<int> parent(maxi+1);
+        for(int i=0;i<maxi+1;i++)parent[i]=i;
+        maxi=0;int cnt=0;
+        int i=0;
+        while(i<arr.size()){
+            int slot=find(parent,arr[i][1]);
+            if(slot>0){
+                maxi+=arr[i][0];
+                cnt++;
+                parent[slot]=find(parent,slot-1);
+            }
+            i++;
+        }
+        
+        return {cnt,maxi};
+        
     }
 };
